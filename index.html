@@ -57,40 +57,40 @@
   /* table */
   table.inv{position:absolute;left:38px;top:333px;width:1204px;border-collapse:collapse;table-layout:fixed;background:transparent}
   table.inv th{background:var(--green);color:#fff;font-weight:600;font-size:14.5px;height:39px;line-height:15px;border:1px solid var(--green);text-align:center}
-  table.inv td{border:1px solid var(--line);height:21.4px;padding:0;text-align:center;font-size:13.5px;color:#2a3138}
+  table.inv td{border:1px solid var(--line);height:20px;padding:0;text-align:center;font-size:13.5px;color:#2a3138}
   table.inv td.sr{font-size:13.5px;color:#222}
-  table.inv td input{width:100%;height:20px;border:0;background:transparent;font:500 12.5px 'Inter',Arial,sans-serif;color:#111;padding:0 5px;outline:none;text-align:left}
+  table.inv td input{width:100%;height:18px;border:0;background:transparent;font:500 12.5px 'Inter',Arial,sans-serif;color:#111;padding:0 5px;outline:none;text-align:left}
   table.inv td input.c{text-align:center}
   table.inv td input.r{text-align:right}
   table.inv td input:focus{background:rgba(15,81,50,.07)}
   table.inv td input[readonly]{color:#0f5132;font-weight:600;cursor:default}
-  table.inv td select.sex{width:100%;height:20px;border:0;background:transparent;font:500 12.5px 'Inter',Arial,sans-serif;color:#111;text-align:center;text-align-last:center;appearance:none;-webkit-appearance:none;-moz-appearance:none;outline:none;cursor:pointer;padding:0}
+  table.inv td select.sex{width:100%;height:18px;border:0;background:transparent;font:500 12.5px 'Inter',Arial,sans-serif;color:#111;text-align:center;text-align-last:center;appearance:none;-webkit-appearance:none;-moz-appearance:none;outline:none;cursor:pointer;padding:0}
   table.inv td select.sex:focus{background:rgba(15,81,50,.07)}
   input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
   input[type=number]{-moz-appearance:textfield;appearance:textfield}
 
   /* buyer */
-  .buyer-pill{left:38px;top:602px;width:128px;height:21px;border-radius:7px;background:var(--green);color:#fff;font-weight:700;font-size:14.5px;line-height:21px;text-align:center}
+  .buyer-pill{left:38px;top:588px;width:128px;height:21px;border-radius:7px;background:var(--green);color:#fff;font-weight:700;font-size:14.5px;line-height:21px;text-align:center}
   .bf .lbl{font-weight:500;font-size:13.5px}
   .bf .ln{font-size:13px}
 
   /* total box */
-  .totalbox{left:726px;top:614px;width:516px;height:89px;border:1.5px solid var(--green);border-radius:9px;background:#f1f6f1}
+  .totalbox{left:726px;top:600px;width:516px;height:89px;border:1.5px solid var(--green);border-radius:9px;background:#f1f6f1}
   .pay{display:flex;align-items:center;gap:7px;font-size:13.5px;color:#333;cursor:pointer;user-select:none}
   .pay input{appearance:none;-webkit-appearance:none;width:17px;height:17px;border:1.3px solid #555;border-radius:3px;background:#fff;cursor:pointer;position:relative;flex:none}
   .pay input:checked{background:var(--green);border-color:var(--green)}
   .pay input:checked::after{content:"";position:absolute;left:5px;top:1px;width:4px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
 
   /* signatures */
-  .sig-line{top:727px;height:1px;background:#4a5a52}
-  .sig-lbl{top:732px;text-align:center;font-weight:500;font-size:13px;color:#222;line-height:15px}
+  .sig-line{top:738px;height:1px;background:#4a5a52}
+  .sig-lbl{top:743px;text-align:center;font-weight:500;font-size:13px;color:#222;line-height:15px}
 
   .sig-lbl .sm{display:block;font-weight:400;font-size:11px;color:#444;line-height:12px}
   .sig-sub{display:flex;align-items:flex-end;height:13px;font-size:10.5px;color:#444;gap:4px}
   .sig-sub span{line-height:12px;white-space:nowrap}
   .sig-sub input{flex:1;min-width:0;height:12px;border:0;border-bottom:1px dotted #7a8a82;background:transparent;font:500 10.5px 'Inter',Arial,sans-serif;color:#111;padding:0 2px;outline:none}
   /* footer */
-  .tag{left:0;width:1280px;top:806px;text-align:center;font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:23px;color:#fff;letter-spacing:1.2px;display:flex;justify-content:center;align-items:center;gap:14px}
+  .tag{left:0;width:1280px;top:814px;text-align:center;font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:23px;color:#fff;letter-spacing:1.2px;display:flex;justify-content:center;align-items:center;gap:14px}
   .tag .rule{width:66px;height:1px;background:rgba(255,255,255,.7)}
 
   .bird{position:absolute;display:none;object-fit:contain;object-position:center bottom;mix-blend-mode:multiply;pointer-events:none}
@@ -124,7 +124,7 @@
   <span id="svg-dove" style="display:none"></span>
 
   <!-- WATERMARK IMAGE SLOT (light faded image above Buyer Signature) -->
-  <img class="bird wm" id="img-dove" alt="" style="left:586px;top:592px;width:73px;height:150px">
+  <img class="bird wm" id="img-dove" alt="" style="left:586px;top:578px;width:73px;height:150px">
 
   <!-- header decoration: corners, gold curves, birds, leaves -->
   <svg class="svgfull" width="1280" height="200" viewBox="0 0 1280 200">
@@ -309,37 +309,37 @@
 
   <!-- buyer details -->
   <div class="abs buyer-pill">Buyer Details:</div>
-  <div class="field bf" style="left:38px;top:626px;width:480px"><span class="lbl">Name:</span><input class="ln" type="text" style="margin-left:48px" aria-label="Buyer name"></div>
-  <div class="field bf" style="left:38px;top:648px;width:480px"><span class="lbl">CNIC / ID No.:</span><input class="ln" type="text" aria-label="Buyer CNIC"></div>
-  <div class="field bf" style="left:38px;top:670px;width:480px"><span class="lbl">Address:</span><input class="ln" type="text" style="margin-left:34px" aria-label="Buyer address"></div>
-  <div class="field bf" style="left:38px;top:691px;width:480px"><span class="lbl">Contact No.:</span><input class="ln" type="text" style="margin-left:6px" aria-label="Buyer contact"></div>
+  <div class="field bf" style="left:38px;top:612px;width:480px"><span class="lbl">Name:</span><input class="ln" type="text" style="margin-left:48px" aria-label="Buyer name"></div>
+  <div class="field bf" style="left:38px;top:634px;width:480px"><span class="lbl">CNIC / ID No.:</span><input class="ln" type="text" aria-label="Buyer CNIC"></div>
+  <div class="field bf" style="left:38px;top:656px;width:480px"><span class="lbl">Address:</span><input class="ln" type="text" style="margin-left:34px" aria-label="Buyer address"></div>
+  <div class="field bf" style="left:38px;top:677px;width:480px"><span class="lbl">Contact No.:</span><input class="ln" type="text" style="margin-left:6px" aria-label="Buyer contact"></div>
 
   <!-- total + payment -->
   <div class="abs totalbox"></div>
-  <div class="field" style="left:740px;top:625px;width:488px"><span class="lbl">Total Amount (Rs.):</span><input class="ln" type="text" id="grand" readonly style="font-weight:700;color:#0f5132;font-size:15px" aria-label="Total amount"></div>
-  <div class="abs" style="left:740px;top:653px;font-size:13px;color:#333">Payment Method:</div>
-  <label class="abs pay" style="left:740px;top:672px"><input type="checkbox" name="pay" value="cash"> Cash</label>
-  <label class="abs pay" style="left:865px;top:672px"><input type="checkbox" name="pay" value="bank"> Bank Transfer</label>
-  <label class="abs pay" style="left:998px;top:672px"><input type="checkbox" name="pay" value="other"> Other</label>
-  <input class="ln abs" type="text" style="left:1061px;top:672px;width:143px" aria-label="Other payment method">
+  <div class="field" style="left:740px;top:611px;width:488px"><span class="lbl">Total Amount (Rs.):</span><input class="ln" type="text" id="grand" readonly style="font-weight:700;color:#0f5132;font-size:15px" aria-label="Total amount"></div>
+  <div class="abs" style="left:740px;top:639px;font-size:13px;color:#333">Payment Method:</div>
+  <label class="abs pay" style="left:740px;top:658px"><input type="checkbox" name="pay" value="cash"> Cash</label>
+  <label class="abs pay" style="left:865px;top:658px"><input type="checkbox" name="pay" value="bank"> Bank Transfer</label>
+  <label class="abs pay" style="left:998px;top:658px"><input type="checkbox" name="pay" value="other"> Other</label>
+  <input class="ln abs" type="text" style="left:1061px;top:658px;width:143px" aria-label="Other payment method">
 
   <!-- signatures -->
   <div class="abs sig-line" style="left:80px;width:217px"></div>
   <div class="abs sig-lbl" style="left:80px;width:217px">Seller Signature</div>
-  <div class="abs sig-sub" style="left:80px;width:217px;top:748px"><span>Designation:</span><input type="text" aria-label="Seller designation"></div>
-  <div class="abs sig-sub" style="left:80px;width:217px;top:761px"><span>CNIC No:</span><input type="text" aria-label="Seller CNIC under signature"></div>
+  <div class="abs sig-sub" style="left:80px;width:217px;top:759px"><span>Designation:</span><input type="text" aria-label="Seller designation"></div>
+  <div class="abs sig-sub" style="left:80px;width:217px;top:771px"><span>CNIC No:</span><input type="text" aria-label="Seller CNIC under signature"></div>
 
   <div class="abs sig-line" style="left:509px;width:249px"></div>
   <div class="abs sig-lbl" style="left:509px;width:249px">Buyer Signature</div>
-  <div class="abs sig-sub" style="left:509px;width:249px;top:748px"><span>Designation:</span><input type="text" aria-label="Buyer designation"></div>
-  <div class="abs sig-sub" style="left:509px;width:249px;top:761px"><span>CNIC No:</span><input type="text" aria-label="Buyer CNIC under signature"></div>
+  <div class="abs sig-sub" style="left:509px;width:249px;top:759px"><span>Designation:</span><input type="text" aria-label="Buyer designation"></div>
+  <div class="abs sig-sub" style="left:509px;width:249px;top:771px"><span>CNIC No:</span><input type="text" aria-label="Buyer CNIC under signature"></div>
 
   <div class="abs sig-line" style="left:964px;width:231px"></div>
   <div class="abs sig-lbl" style="left:964px;width:231px">Authorized Signature<span class="sm">(Al-Noor Aviary)</span></div>
-  <div class="abs sig-sub" style="left:964px;width:231px;top:761px"><span>Designation:</span><input type="text" aria-label="Authorized designation"></div>
+  <div class="abs sig-sub" style="left:964px;width:231px;top:771px"><span>Designation:</span><input type="text" aria-label="Authorized designation"></div>
 
   <!-- footer wave -->
-  <svg class="svgfull" style="top:760px" width="1280" height="93" viewBox="0 0 1280 93">
+  <svg class="svgfull" style="top:776px" width="1280" height="93" viewBox="0 0 1280 93">
     <defs><linearGradient id="gold2" x1="0" x2="1"><stop offset="0" stop-color="#b98f3c"/><stop offset=".5" stop-color="#e2c577"/><stop offset="1" stop-color="#b98f3c"/></linearGradient></defs>
     <path d="M0 14C120 40 300 52 520 40C760 28 960 30 1130 38C1200 42 1250 32 1280 14V93H0Z" fill="#0f5132"/>
     <path d="M0 6C120 30 300 42 520 32C760 20 960 22 1130 30C1200 34 1250 24 1280 8" fill="none" stroke="url(#gold2)" stroke-width="3"/>
