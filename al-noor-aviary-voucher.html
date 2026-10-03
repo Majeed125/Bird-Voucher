@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Al-Noor Aviary - Bird Purchase Voucher</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#0f5132;
+    --green-dark:#0b4128;
+    --gold:#c9a24d;
+    --paper:#fbfbf7;
+    --ink:#1f2933;
+    --line:#2b6a4c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#e5e7eb}
+  body{font-family:'Inter','Segoe UI',Arial,sans-serif;color:var(--ink);min-height:100vh}
+
+  .toolbar{max-width:1280px;margin:0 auto;padding:12px 10px 0;display:flex;justify-content:flex-end}
+  .toolbar button{background:var(--green);color:#fff;border:0;border-radius:6px;padding:9px 20px;font:600 14px 'Inter',Arial,sans-serif;cursor:pointer}
+  .toolbar button:hover{background:var(--green-dark)}
+
+  .stage{width:100%;display:flex;justify-content:center;padding:10px}
+  .frame{position:relative;width:1280px;height:853px;transform-origin:top left}
+
+  /* ---------- the voucher sheet (fixed 1280 x 853 canvas) ---------- */
+  .sheet{position:absolute;left:0;top:0;width:1280px;height:853px;background:var(--paper);overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.18)}
+  .abs{position:absolute}
+  .svgfull{position:absolute;left:0;top:0;pointer-events:none}
+
+  .brand{left:0;width:1280px;top:8px;text-align:center;font-family:'Cinzel','Trajan Pro',Georgia,serif;font-weight:700;font-size:68px;line-height:76px;color:var(--green);letter-spacing:1px}
+  .tagline{left:0;width:1280px;top:84px;text-align:center;font-weight:600;font-size:19.5px;letter-spacing:2.2px;color:var(--green);white-space:nowrap}
+  .tagline i{font-style:normal;margin:0 12px}
+  .pill{left:362px;top:115px;width:556px;height:45px;border-radius:12px;background:var(--green);color:#fff;text-align:center;font-weight:700;font-size:31px;line-height:45px;letter-spacing:2.5px}
+  .sub{left:0;width:1280px;top:167px;text-align:center;font-weight:500;font-size:16px;letter-spacing:1.6px;color:var(--green)}
+
+  /* info bar */
+  .bar-line{left:38px;width:1204px;height:1px;background:#8fa99b}
+  .info{top:203px;height:24px;display:flex;align-items:center;gap:10px;font-size:14.5px;font-weight:500;color:#25303a;white-space:nowrap}
+  .ico{width:24px;height:24px;border-radius:50%;background:var(--green);display:inline-flex;align-items:center;justify-content:center;flex:none}
+  .ico svg{width:14px;height:14px;fill:#fff}
+  .ico.sq{border-radius:3px;background:transparent;border:1.6px solid var(--green);width:20px;height:24px}
+
+  /* fields */
+  .lbl{font-weight:700;font-size:16px;color:#1b242c;white-space:nowrap}
+  .field{position:absolute;display:flex;align-items:flex-end;height:22px}
+  .field .lbl{margin-right:4px;line-height:20px}
+  .ln{flex:1;border:0;border-bottom:1px solid #4a5a52;background:transparent;font:500 14px 'Inter',Arial,sans-serif;color:#111;height:20px;padding:0 4px;outline:none;min-width:0}
+  .ln:focus{border-bottom-color:var(--green);background:rgba(15,81,50,.05)}
+  .dsep{font-size:16px;color:#333;margin:0 6px;line-height:20px}
+
+  /* table */
+  table.inv{position:absolute;left:38px;top:333px;width:1204px;border-collapse:collapse;table-layout:fixed;background:transparent}
+  table.inv th{background:var(--green);color:#fff;font-weight:600;font-size:14.5px;height:39px;line-height:15px;border:1px solid var(--green);text-align:center}
+  table.inv td{border:1px solid var(--line);height:21.4px;padding:0;text-align:center;font-size:13.5px;color:#2a3138}
+  table.inv td.sr{font-size:13.5px;color:#222}
+  table.inv td input{width:100%;height:20px;border:0;background:transparent;font:500 12.5px 'Inter',Arial,sans-serif;color:#111;padding:0 5px;outline:none;text-align:left}
+  table.inv td input.c{text-align:center}
+  table.inv td input.r{text-align:right}
+  table.inv td input:focus{background:rgba(15,81,50,.07)}
+  table.inv td input[readonly]{color:#0f5132;font-weight:600;cursor:default}
+  input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  input[type=number]{-moz-appearance:textfield;appearance:textfield}
+
+  /* buyer */
+  .buyer-pill{left:38px;top:602px;width:128px;height:21px;border-radius:7px;background:var(--green);color:#fff;font-weight:700;font-size:14.5px;line-height:21px;text-align:center}
+  .bf .lbl{font-weight:500;font-size:13.5px}
+  .bf .ln{font-size:13px}
+
+  /* total box */
+  .totalbox{left:726px;top:614px;width:516px;height:89px;border:1.5px solid var(--green);border-radius:9px;background:#f1f6f1}
+  .pay{display:flex;align-items:center;gap:7px;font-size:13.5px;color:#333;cursor:pointer;user-select:none}
+  .pay input{appearance:none;-webkit-appearance:none;width:17px;height:17px;border:1.3px solid #555;border-radius:3px;background:#fff;cursor:pointer;position:relative;flex:none}
+  .pay input:checked{background:var(--green);border-color:var(--green)}
+  .pay input:checked::after{content:"";position:absolute;left:5px;top:1px;width:4px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+
+  /* signatures */
+  .sig-line{top:753px;height:1px;background:#4a5a52}
+  .sig-lbl{top:758px;text-align:center;font-weight:500;font-size:13px;color:#222;line-height:15px}
+
+  /* footer */
+  .tag{left:0;width:1280px;top:806px;text-align:center;font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:23px;color:#fff;letter-spacing:1.2px;display:flex;justify-content:center;align-items:center;gap:14px}
+  .tag .rule{width:66px;height:1px;background:rgba(255,255,255,.7)}
+
+  .bird{position:absolute;display:none;object-fit:contain;object-position:center bottom;mix-blend-mode:multiply;pointer-events:none}
+  .bird.on{display:block}
+  /* ---------- print ---------- */
+  @page{size:1280px 853px;margin:0}
+  @media print{
+    html,body{background:#fff}
+    .toolbar{display:none!important}
+    .stage{padding:0;display:block}
+    .frame{transform:none!important;width:1280px;height:853px}
+    .sheet{box-shadow:none}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .ln,table.inv td input{background:transparent!important}
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar"><button type="button" onclick="window.print()">Print Voucher / Save PDF</button></div>
+
+<div class="stage" id="stage">
+<div class="frame" id="frame">
+<div class="sheet">
+
+  <!-- watermark dove -->
+  <svg class="svgfull" style="left:560px;top:590px" width="140" height="140" viewBox="0 0 140 140" opacity=".09">
+    <path fill="#0f5132" d="M20 40c14-12 30-14 44-8 8-10 22-14 34-8-8 2-12 6-14 10 12 2 22 10 26 22-8-6-16-8-22-6 2 18-8 38-30 48-8 4-14 10-16 20-4-10-2-18 4-26-14 2-26-4-34-14 8 2 14 2 18 0-8-6-14-14-10-38z"/>
+    <path fill="#0f5132" d="M30 40c-10-4-16-2-20 2 6 0 10 2 12 6z"/>
+  </svg>
+
+  <!-- header decoration: corners, gold curves, birds, leaves -->
+  <svg class="svgfull" width="1280" height="200" viewBox="0 0 1280 200">
+    <defs>
+      <linearGradient id="gold" x1="0" x2="1"><stop offset="0" stop-color="#b98f3c"/><stop offset=".5" stop-color="#e2c577"/><stop offset="1" stop-color="#b98f3c"/></linearGradient>
+      <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1b6fb8"/><stop offset="1" stop-color="#0a2a6b"/></linearGradient>
+      <linearGradient id="grn" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8fd13a"/><stop offset="1" stop-color="#3f9b1e"/></linearGradient>
+      <linearGradient id="cop" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c8641f"/><stop offset="1" stop-color="#6e2a0e"/></linearGradient>
+    </defs>
+
+    <!-- left corner green + gold curve -->
+    <path d="M0 0H92C60 8 20 38 0 80Z" fill="#0f5132"/>
+    <path d="M0 74C28 34 70 8 118 0" fill="none" stroke="url(#gold)" stroke-width="3"/>
+    <!-- right bottom green + gold curve -->
+    <path d="M1280 112C1252 150 1230 176 1180 190L1280 190Z" fill="#0f5132"/>
+    <path d="M960 190C1070 190 1200 170 1280 118" fill="none" stroke="url(#gold)" stroke-width="3"/>
+    <path d="M0 193H1280" stroke="#0f5132" stroke-width="0"/>
+
+    <!-- LEFT leaves -->
+    <g fill="#4f8f3a">
+      <path d="M28 70c-14-6-20-26-14-44 12 8 20 26 14 44z"/>
+      <path d="M62 34c-4-16 6-30 22-34 2 16-6 30-22 34z" fill="#3d7d2f"/>
+      <path d="M270 112c14-14 34-18 50-10-8 16-30 22-50 10z" fill="#5a9a43"/>
+      <path d="M262 150c10-18 26-24 44-20-6 16-24 26-44 20z" fill="#3d7d2f"/>
+      <path d="M296 70c18-6 30 6 32 22-16 2-30-6-32-22z" fill="#4f8f3a"/>
+    </g>
+
+    <!-- PEACOCK -->
+    <g id="svg-peacock">
+      <!-- tail -->
+      <path d="M6 190C-4 150 10 112 52 92c20 22 28 58 20 98z" fill="#0f7a4e"/>
+      <path d="M10 190C6 160 20 130 50 110" fill="none" stroke="#7bd6a0" stroke-width="2" opacity=".6"/>
+      <g fill="#b6e07a"><ellipse cx="22" cy="150" rx="5" ry="8"/><ellipse cx="38" cy="136" rx="5" ry="8"/><ellipse cx="52" cy="152" rx="5" ry="8"/><ellipse cx="34" cy="172" rx="5" ry="8"/></g>
+      <g fill="#1b6fb8"><ellipse cx="22" cy="150" rx="2.5" ry="4"/><ellipse cx="38" cy="136" rx="2.5" ry="4"/><ellipse cx="52" cy="152" rx="2.5" ry="4"/><ellipse cx="34" cy="172" rx="2.5" ry="4"/></g>
+      <!-- wing / back -->
+      <path d="M50 110c18-26 44-34 64-22 6 34-8 70-40 92-24-8-34-34-24-70z" fill="#c9ccc8"/>
+      <path d="M62 112c14-14 30-18 44-12" fill="none" stroke="#6c6f6a" stroke-width="2"/>
+      <g stroke="#7a7d78" stroke-width="1.4" fill="none"><path d="M66 126c12-6 24-8 36-4"/><path d="M62 142c14-6 28-8 40-4"/><path d="M66 158c12-4 24-6 34-2"/></g>
+      <!-- body & neck -->
+      <path d="M104 190c-30-20-40-60-14-92 14-18 38-30 52-42 14-6 22 2 22 14 0 10-8 20-14 32 24 16 24 54 0 88z" fill="url(#blue)"/>
+      <path d="M140 66c10 6 26 24 30 56-10-18-20-34-30-56z" fill="#1d5fa8" opacity=".7"/>
+      <!-- head -->
+      <ellipse cx="156" cy="40" rx="22" ry="20" fill="#0f3f9a"/>
+      <ellipse cx="166" cy="40" rx="9" ry="7" fill="#fff"/>
+      <circle cx="166" cy="40" r="3.4" fill="#111"/>
+      <path d="M182 36l22 6-22 6z" fill="#e4d9c3" stroke="#a5946f" stroke-width=".8"/>
+      <!-- crest -->
+      <g stroke="#1b4fa0" stroke-width="1.6" fill="none"><path d="M152 24c-2-10-2-14 0-20"/><path d="M158 22c0-10 2-14 6-18"/><path d="M146 26c-4-8-6-12-8-16"/></g>
+      <g fill="#2f7fd0"><circle cx="152" cy="4" r="3"/><circle cx="164" cy="4" r="3"/><circle cx="138" cy="10" r="3"/></g>
+    </g>
+
+    <!-- PARROT on branch -->
+    <g id="svg-parrot">
+      <path d="M150 178c40-8 92-6 118-14l8 10c-30 12-86 12-126 12z" fill="#8a5a2b"/>
+      <path d="M172 176c26-4 60-4 84-6" stroke="#5e3a18" stroke-width="2" fill="none"/>
+      <!-- tail -->
+      <path d="M180 190c6-30 12-52 22-70l14 10c-4 24-12 44-22 60z" fill="#3f9b1e"/>
+      <!-- body -->
+      <path d="M204 176c-18-24-12-62 8-82 14-14 40-14 52 2 12 20 4 56-14 74-14 12-34 14-46 6z" fill="url(#grn)"/>
+      <path d="M222 100c10-6 24-4 30 4" stroke="#3f9b1e" stroke-width="2" fill="none"/>
+      <!-- head -->
+      <circle cx="244" cy="72" r="27" fill="#8fd13a"/>
+      <path d="M268 62c10-4 20 4 14 16-4 8-14 8-18 2z" fill="#d9231e"/>
+      <circle cx="254" cy="64" r="4.5" fill="#fff"/><circle cx="255" cy="64" r="2.6" fill="#111"/>
+      <path d="M232 100c6 8 14 12 24 10" stroke="#2f6e14" stroke-width="2.5" fill="none"/>
+      <!-- feet -->
+      <path d="M228 176l-2 12M238 176l2 12" stroke="#7a7a7a" stroke-width="3"/>
+    </g>
+    <!-- parrot leaf cluster behind right -->
+    <g fill="#5a9a43"><path d="M300 56c10-18 28-26 44-24-4 18-22 30-44 24z"/><path d="M286 96c12-14 28-18 40-12-6 14-20 20-40 12z" fill="#3d7d2f"/></g>
+
+    <!-- RIGHT leaves -->
+    <g fill="#4f8f3a">
+      <path d="M1050 6c14-4 28 4 34 20-16 4-30-4-34-20z" fill="#3d7d2f"/>
+      <path d="M1088 70c4-18 20-28 38-26-4 18-20 30-38 26z"/>
+      <path d="M1236 18c-14 4-24 16-24 34 16-2 26-14 24-34z" fill="#3d7d2f"/>
+      <path d="M1244 78c-10 10-12 26-6 38 12-8 14-24 6-38z"/>
+      <path d="M1000 158c-4 14-14 24-30 28 2-16 12-26 30-28z" fill="#3d7d2f"/>
+    </g>
+
+    <!-- PHEASANT -->
+    <g id="svg-pheasant">
+      <!-- tail -->
+      <path d="M1118 140c-46-6-84 8-124 38l14 10c40-18 80-30 118-30z" fill="#a24a16"/>
+      <path d="M1124 150c-40 6-86 16-120 40" stroke="#6e2a0e" stroke-width="1.6" fill="none"/>
+      <!-- body -->
+      <path d="M996 78c10-10 34-12 52-4 22-4 54 4 74 26 18 20 22 44 6 64-26 8-70 6-100-4-30-12-40-48-32-82z" fill="url(#cop)"/>
+      <g stroke="#f0c070" stroke-width="1.5" fill="none" opacity=".85"><path d="M1040 110c14-8 30-8 44 0"/><path d="M1050 128c14-8 30-8 44 0"/><path d="M1034 134c10-6 22-6 32 0"/><path d="M1068 100c12-6 24-4 34 4"/></g>
+      <!-- wing patch -->
+      <path d="M1034 104c26-10 56-4 70 14-22 14-54 12-70-14z" fill="#8f3a12" opacity=".6"/>
+      <!-- breast -->
+      <path d="M996 80c-8 10-8 22-2 34 8-4 16-10 20-20z" fill="#7a2c0e"/>
+      <!-- neck white band & green head -->
+      <path d="M1000 62c14-12 34-12 46-2l-4 22c-14-6-30-6-42 0z" fill="#fff"/>
+      <path d="M1000 52c6-18 24-24 38-14 8 8 8 18 4 24-12-8-30-10-42-10z" fill="#173c6b"/>
+      <ellipse cx="1008" cy="48" rx="15" ry="10" fill="#c92b22"/>
+      <circle cx="1008" cy="46" r="3.6" fill="#fff"/><circle cx="1008" cy="46" r="2" fill="#111"/>
+      <path d="M994 46l-14 4 14 6z" fill="#cdbf88"/>
+      <path d="M1060 164l-4 18M1076 166l2 18" stroke="#8a6a3a" stroke-width="3"/>
+    </g>
+
+    <!-- COCKATOO -->
+    <g id="svg-cockatoo">
+      <!-- crest -->
+      <g fill="#f4d338"><path d="M1196 6c10 16 12 30 8 44l-10-6z"/><path d="M1204 4c16 10 24 24 24 38l-14-4z"/><path d="M1190 12c-2 14-6 24-14 32l-8-8z"/><path d="M1212 14c14 4 24 14 28 26l-14 2z"/></g>
+      <!-- tail -->
+      <path d="M1214 150c14 12 20 28 20 40l-30-6z" fill="#e8e8e2"/>
+      <!-- body -->
+      <path d="M1170 70c24-8 52 2 62 28 8 22 0 54-24 72-16 12-34 6-42-12-10-22-12-60 4-88z" fill="#fff" stroke="#d9d9d2" stroke-width="1.4"/>
+      <path d="M1186 108c14-6 30-2 38 10-14 8-30 6-38-10z" fill="#ececE6"/>
+      <!-- head -->
+      <circle cx="1186" cy="62" r="26" fill="#fff" stroke="#d9d9d2" stroke-width="1.4"/>
+      <path d="M1170 56c-10 0-18 8-14 20 4 8 12 8 16 2z" fill="#2c2c2c"/>
+      <circle cx="1180" cy="56" r="4" fill="#111"/>
+      <path d="M1196 148l-6 22M1212 150l2 22" stroke="#8a8a8a" stroke-width="3"/>
+    </g>
+  </svg>
+
+  <!-- REAL BIRD IMAGE SLOTS (set the paths in the IMAGES object in the script at the bottom) -->
+  <img class="bird" id="img-peacock"  alt="Peacock"  style="left:0;top:0;width:200px;height:196px">
+  <img class="bird" id="img-parrot"   alt="Parrot"   style="left:150px;top:10px;width:185px;height:186px">
+  <img class="bird" id="img-pheasant" alt="Pheasant" style="left:960px;top:30px;width:190px;height:166px">
+  <img class="bird" id="img-cockatoo" alt="Cockatoo" style="left:1120px;top:0;width:160px;height:190px">
+
+  <!-- header text -->
+  <div class="abs brand">Al-Noor Aviary</div>
+  <div class="abs tagline">QUALITY BIRDS<i>&bull;</i>HEALTHY LIFE<i>&bull;</i>NATURAL BEAUTY</div>
+  <div class="abs pill">BIRD PURCHASE VOUCHER</div>
+  <div class="abs sub">EXOTIC BIRDS | GAME BIRDS | PET BIRDS | BREEDING STOCK</div>
+
+  <!-- info bar -->
+  <div class="abs bar-line" style="top:198px"></div>
+  <div class="abs info" style="left:40px">
+    <span class="ico"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg></span>
+    <span>Kahuta Road, District Rawalpindi, Pakistan</span>
+  </div>
+  <div class="abs info" style="left:470px">
+    <span class="ico"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11 11 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.250.2 2.450.6 3.600a1 1 0 0 1-.25 1z"/></svg></span>
+    <span>+92 300 1234567</span>
+  </div>
+  <div class="abs info" style="left:675px">
+    <span class="ico"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.600 15L2 22l5.200-1.400A10 10 0 1 0 12 2zm5.200 14.100c-.2.600-1.300 1.200-1.800 1.200-.5.100-1 .2-3.300-.7-2.800-1.100-4.500-3.900-4.700-4.100-.1-.2-1.100-1.500-1.100-2.800s.7-2 1-2.300c.2-.3.500-.3.700-.3h.5c.2 0 .4 0 .6.500l.8 1.900c.1.200.1.400 0 .5l-.3.500-.4.400c-.1.200-.3.300-.1.600.2.300.8 1.300 1.700 2.100 1.100 1 2.100 1.300 2.400 1.400.3.100.5.100.6-.1l.8-1c.2-.2.400-.2.600-.1l1.800.9c.3.100.5.200.5.300.1.200.1.800-.1 1.400z"/></svg></span>
+    <span>+92 300 1234567</span>
+  </div>
+  <div class="abs info" style="left:950px">
+    <span class="ico sq"><svg viewBox="0 0 24 24" style="fill:var(--green);width:11px;height:13px"><path d="M4 3h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm0 4h10v2H4z"/></svg></span>
+    <span>Wildlife License No.&nbsp; WR-2024-00123</span>
+  </div>
+  <div class="abs bar-line" style="top:231px"></div>
+
+  <!-- voucher / date -->
+  <div class="field" style="left:38px;top:253px;width:315px"><span class="lbl">Voucher No.:</span><input class="ln" type="text" aria-label="Voucher number"></div>
+  <div class="field" style="left:38px;top:288px;width:315px">
+    <span class="lbl" style="margin-right:34px">Date:</span>
+    <input class="ln" type="text" maxlength="2" style="flex:none;width:58px;text-align:center" aria-label="Day"><span class="dsep">/</span>
+    <input class="ln" type="text" maxlength="2" style="flex:none;width:58px;text-align:center" aria-label="Month"><span class="dsep">/</span>
+    <input class="ln" type="text" maxlength="4" style="flex:none;width:76px;text-align:center" aria-label="Year">
+  </div>
+
+  <!-- seller -->
+  <div class="field" style="left:592px;top:242px;width:650px"><span class="lbl">Seller Name:</span><input class="ln" type="text" aria-label="Seller name"></div>
+  <div class="field" style="left:592px;top:267px;width:650px"><span class="lbl">CNIC / ID No.:</span><input class="ln" type="text" aria-label="Seller CNIC"></div>
+  <div class="field" style="left:592px;top:292px;width:650px"><span class="lbl">Address:</span><input class="ln" type="text" aria-label="Seller address"></div>
+
+  <!-- inventory table -->
+  <table class="inv" id="inv">
+    <colgroup>
+      <col style="width:69px"><col style="width:238px"><col style="width:124px"><col style="width:229px"><col style="width:161px"><col style="width:176px"><col style="width:207px">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Sr. No.</th><th>Bird Species</th><th>Quantity</th><th>Identification / Tag No.</th><th>Unit Price<br>(Rs.)</th><th>Total Price<br>(Rs.)</th><th>Remarks</th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+  <!-- buyer details -->
+  <div class="abs buyer-pill">Buyer Details:</div>
+  <div class="field bf" style="left:38px;top:626px;width:480px"><span class="lbl">Name:</span><input class="ln" type="text" style="margin-left:48px" aria-label="Buyer name"></div>
+  <div class="field bf" style="left:38px;top:648px;width:480px"><span class="lbl">CNIC / ID No.:</span><input class="ln" type="text" aria-label="Buyer CNIC"></div>
+  <div class="field bf" style="left:38px;top:670px;width:480px"><span class="lbl">Address:</span><input class="ln" type="text" style="margin-left:34px" aria-label="Buyer address"></div>
+  <div class="field bf" style="left:38px;top:691px;width:480px"><span class="lbl">Contact No.:</span><input class="ln" type="text" style="margin-left:6px" aria-label="Buyer contact"></div>
+
+  <!-- total + payment -->
+  <div class="abs totalbox"></div>
+  <div class="field" style="left:740px;top:625px;width:488px"><span class="lbl">Total Amount (Rs.):</span><input class="ln" type="text" id="grand" readonly style="font-weight:700;color:#0f5132;font-size:15px" aria-label="Total amount"></div>
+  <div class="abs" style="left:740px;top:653px;font-size:13px;color:#333">Payment Method:</div>
+  <label class="abs pay" style="left:740px;top:672px"><input type="checkbox" name="pay" value="cash"> Cash</label>
+  <label class="abs pay" style="left:865px;top:672px"><input type="checkbox" name="pay" value="bank"> Bank Transfer</label>
+  <label class="abs pay" style="left:998px;top:672px"><input type="checkbox" name="pay" value="other"> Other</label>
+  <input class="ln abs" type="text" style="left:1061px;top:672px;width:143px" aria-label="Other payment method">
+
+  <!-- signatures -->
+  <div class="abs sig-line" style="left:80px;width:217px"></div>
+  <div class="abs sig-lbl" style="left:80px;width:217px">Seller Signature</div>
+  <div class="abs sig-line" style="left:509px;width:249px"></div>
+  <div class="abs sig-lbl" style="left:509px;width:249px">Buyer Signature</div>
+  <div class="abs sig-line" style="left:964px;width:231px"></div>
+  <div class="abs sig-lbl" style="left:964px;width:231px">Authorized Signature<br>(Al-Noor Aviary)</div>
+
+  <!-- footer wave -->
+  <svg class="svgfull" style="top:760px" width="1280" height="93" viewBox="0 0 1280 93">
+    <defs><linearGradient id="gold2" x1="0" x2="1"><stop offset="0" stop-color="#b98f3c"/><stop offset=".5" stop-color="#e2c577"/><stop offset="1" stop-color="#b98f3c"/></linearGradient></defs>
+    <path d="M0 14C120 40 300 52 520 40C760 28 960 30 1130 38C1200 42 1250 32 1280 14V93H0Z" fill="#0f5132"/>
+    <path d="M0 6C120 30 300 42 520 32C760 20 960 22 1130 30C1200 34 1250 24 1280 8" fill="none" stroke="url(#gold2)" stroke-width="3"/>
+  </svg>
+  <div class="abs tag">
+    <span class="rule"></span>
+    <span>Birds Bring Joy to Life</span>
+    <svg width="20" height="20" viewBox="0 0 24 24" style="margin-left:-6px"><g fill="#c9a24d"><path d="M12 22c0-8 0-12 2-18-4 3-6 8-5 14z"/><path d="M12 14c-4-1-6-4-6-8 4 1 6 4 6 8z"/><path d="M12 12c3-3 6-4 9-3-1 4-4 6-9 3z"/></g></svg>
+    <span class="rule"></span>
+  </div>
+
+</div>
+</div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---- REAL BIRD IMAGES ----
+     Paste your image path or URL between the quotes.
+     Leave "" to keep the built-in drawing for that bird.
+     Example: peacock: "images/peacock.png"                          */
+  var IMAGES = {
+    peacock:  "",
+    parrot:   "",
+    pheasant: "",
+    cockatoo: ""
+  };
+  Object.keys(IMAGES).forEach(function (k) {
+    if (!IMAGES[k]) return;
+    var img = document.getElementById('img-' + k);
+    var svg = document.getElementById('svg-' + k);
+    img.onload = function () { img.classList.add('on'); if (svg) svg.style.display = 'none'; };
+    img.src = IMAGES[k];
+  });
+
+  /* ---- build 10 invoice rows ---- */
+  var tbody = document.getElementById('rows');
+  var html = '';
+  for (var i = 1; i <= 10; i++) {
+    html += '<tr>' +
+      '<td class="sr">' + i + '</td>' +
+      '<td><input type="text" aria-label="Bird species row ' + i + '"></td>' +
+      '<td><input type="number" min="0" step="1" class="c qty" aria-label="Quantity row ' + i + '"></td>' +
+      '<td><input type="text" class="c" aria-label="Tag number row ' + i + '"></td>' +
+      '<td><input type="number" min="0" step="any" class="r price" aria-label="Unit price row ' + i + '"></td>' +
+      '<td><input type="text" class="r line" readonly tabindex="-1" aria-label="Total price row ' + i + '"></td>' +
+      '<td><input type="text" aria-label="Remarks row ' + i + '"></td>' +
+      '</tr>';
+  }
+  tbody.innerHTML = html;
+
+  /* ---- calculations ---- */
+  function fmt(n) {
+    return n.toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function recalc() {
+    var grand = 0;
+    var rows = tbody.querySelectorAll('tr');
+    for (var r = 0; r < rows.length; r++) {
+      var qty = parseFloat(rows[r].querySelector('.qty').value);
+      var price = parseFloat(rows[r].querySelector('.price').value);
+      var out = rows[r].querySelector('.line');
+      if (isNaN(qty)) qty = 0;
+      if (isNaN(price)) price = 0;
+      var total = qty * price;
+      out.value = total > 0 ? fmt(total) : '';
+      grand += total;
+    }
+    document.getElementById('grand').value = grand > 0 ? fmt(grand) : '';
+  }
+
+  tbody.addEventListener('input', function (e) {
+    if (e.target.classList.contains('qty') || e.target.classList.contains('price')) recalc();
+  });
+
+  /* ---- scale the fixed 1280x853 sheet to fit any screen ---- */
+  var frame = document.getElementById('frame');
+  var stage = document.getElementById('stage');
+
+  function fit() {
+    var avail = Math.min(window.innerWidth, document.documentElement.clientWidth) - 20;
+    var s = Math.min(1, avail / 1280);
+    frame.style.transform = 'scale(' + s + ')';
+    frame.style.marginRight = (1280 * s - 1280) + 'px';
+    stage.style.height = (853 * s + 20) + 'px';
+  }
+  window.addEventListener('resize', fit);
+  window.addEventListener('beforeprint', function () { frame.style.transform = 'none'; frame.style.marginRight = '0'; stage.style.height = 'auto'; });
+  window.addEventListener('afterprint', fit);
+  fit();
+})();
+</script>
+</body>
+</html>
